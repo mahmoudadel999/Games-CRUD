@@ -107,7 +107,7 @@
             {
                 isDeleted = true;
                 var cover = Path.Combine(_imagesPath, game.Cover);
-                File.Delete(cover); 
+                File.Delete(cover);
             }
 
             return isDeleted;
@@ -117,14 +117,15 @@
         {
             var coverName = $"{Guid.NewGuid()}{Path.GetExtension(cover.FileName)}";
 
-            var path = Path.Combine(_imagesPath, coverName);
+            var folderPath = Path.Combine("wwwroot", "assets", "images", "games");
+            Directory.CreateDirectory(folderPath);
+
+            var path = Path.Combine(folderPath, coverName);
 
             using var stream = File.Create(path);
             await cover.CopyToAsync(stream);
 
             return coverName;
         }
-
-
     }
 }
