@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace GameZone
 {
     public class Program
@@ -17,11 +19,16 @@ namespace GameZone
             builder.Services.AddScoped(typeof(IDevicesService), typeof(DevicesService));
             builder.Services.AddScoped(typeof(IGamesService), typeof(GamesService));
 
-
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                context.Database.EnsureCreated();
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
